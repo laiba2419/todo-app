@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
-  // 🟢 Load data when app starts
+  // 🟢 Load from localStorage
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("todos"));
     if (savedTasks) {
@@ -12,21 +13,39 @@ function App() {
     }
   }, []);
 
-  // 🟢 Save data whenever tasks change
+  // 🟢 Save to localStorage
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = () => {
+  // ➕ Add or Update Task
+  const handleAdd = () => {
     if (task === "") return;
 
-    setTasks([...tasks, task]);
+    if (editIndex !== null) {
+      // UPDATE
+      const updatedTasks = [...tasks];
+      updatedTasks[editIndex] = task;
+      setTasks(updatedTasks);
+      setEditIndex(null);
+    } else {
+      // ADD
+      setTasks([...tasks, task]);
+    }
+
     setTask("");
   };
 
+  // ❌ Delete Task
   const deleteTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
+  };
+
+  // ✏️ Edit Task
+  const editTask = (index) => {
+    setTask(tasks[index]);
+    setEditIndex(index);
   };
 
   return (
@@ -39,12 +58,16 @@ function App() {
         placeholder="Enter task"
       />
 
-      <button onClick={addTask}>Add</button>
+      <button onClick={handleAdd}>
+        {editIndex !== null ? "Update" : "Add"}
+      </button>
 
       <ul style={{ listStyle: "none" }}>
         {tasks.map((t, index) => (
-          <li key={index}>
+          <li key={index} style={{ margin: "10px" }}>
             {t}
+
+            <button onClick={() => editTask(index)}>Edit</button>
             <button onClick={() => deleteTask(index)}>Delete</button>
           </li>
         ))}
