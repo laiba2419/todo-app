@@ -1,7 +1,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  background: #000;
+  color: white;
 }
 
 .container {
@@ -11,16 +12,18 @@ body {
 }
 
 .card {
-  background: white;
+  background: #111;
   padding: 25px;
-  width: 400px;
+  width: 420px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.05);
   text-align: center;
 }
 
 h1 {
+  color: white;
   margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .inputBox {
@@ -32,8 +35,11 @@ h1 {
 input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #333;
   border-radius: 8px;
+  background: #000;
+  color: white;
+  outline: none;
 }
 
 button {
@@ -41,8 +47,9 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background: #4f46e5;
-  color: white;
+  background: white;
+  color: black;
+  font-weight: bold;
 }
 
 ul {
@@ -51,7 +58,8 @@ ul {
 }
 
 li {
-  background: #f9fafb;
+  background: #000;
+  border: 1px solid #222;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
@@ -61,10 +69,12 @@ li {
 }
 
 .edit {
-  background: #f59e0b;
+  background: #fff;
+  color: #000;
   margin-right: 5px;
 }
 
 .delete {
-  background: #ef4444;
+  background: #444;
+  color: white;
 }
