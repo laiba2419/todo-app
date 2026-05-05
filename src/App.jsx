@@ -1,24 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
+
+  // 🟢 Load data when app starts
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("todos"));
+    if (savedTasks) {
+      setTasks(savedTasks);
+    }
+  }, []);
+
+  // 🟢 Save data whenever tasks change
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     if (task === "") return;
 
-    if (editIndex !== null) {
-      // UPDATE existing task
-      const updatedTasks = [...tasks];
-      updatedTasks[editIndex] = task;
-      setTasks(updatedTasks);
-      setEditIndex(null);
-    } else {
-      // ADD new task
-      setTasks([...tasks, task]);
-    }
-
+    setTasks([...tasks, task]);
     setTask("");
   };
 
@@ -27,32 +29,22 @@ function App() {
     setTasks(newTasks);
   };
 
-  const editTask = (index) => {
-    setTask(tasks[index]);
-    setEditIndex(index);
-  };
-
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>My Todo List</h1>
+      <h1>Todo App</h1>
 
       <input
-        type="text"
-        placeholder="Enter task"
         value={task}
         onChange={(e) => setTask(e.target.value)}
+        placeholder="Enter task"
       />
 
-      <button onClick={addTask}>
-        {editIndex !== null ? "Update" : "Add"}
-      </button>
+      <button onClick={addTask}>Add</button>
 
       <ul style={{ listStyle: "none" }}>
         {tasks.map((t, index) => (
-          <li key={index} style={{ margin: "10px" }}>
+          <li key={index}>
             {t}
-
-            <button onClick={() => editTask(index)}>Edit</button>
             <button onClick={() => deleteTask(index)}>Delete</button>
           </li>
         ))}
