@@ -40,8 +40,7 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
+    <div className="card">
         <h1>✨ My Todo List</h1>
 
         <div className="inputBox">
