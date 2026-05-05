@@ -1,77 +1,77 @@
 import { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
 
-  // 🟢 Load from localStorage
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("todos"));
-    if (savedTasks) {
-      setTasks(savedTasks);
-    }
+    const saved = JSON.parse(localStorage.getItem("todos"));
+    if (saved) setTasks(saved);
   }, []);
 
-  // 🟢 Save to localStorage
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(tasks));
   }, [tasks]);
 
-  // ➕ Add or Update Task
   const handleAdd = () => {
     if (task === "") return;
 
     if (editIndex !== null) {
-      // UPDATE
-      const updatedTasks = [...tasks];
-      updatedTasks[editIndex] = task;
-      setTasks(updatedTasks);
+      const updated = [...tasks];
+      updated[editIndex] = task;
+      setTasks(updated);
       setEditIndex(null);
     } else {
-      // ADD
       setTasks([...tasks, task]);
     }
 
     setTask("");
   };
 
-  // ❌ Delete Task
   const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
+    setTasks(tasks.filter((_, i) => i !== index));
   };
 
-  // ✏️ Edit Task
   const editTask = (index) => {
     setTask(tasks[index]);
     setEditIndex(index);
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Todo App</h1>
+    <div className="container">
+      <div className="card">
+        <h1>✨ My Todo List</h1>
 
-      <input
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        placeholder="Enter task"
-      />
+        <div className="inputBox">
+          <input
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            placeholder="Enter your task..."
+          />
+          <button onClick={handleAdd}>
+            {editIndex !== null ? "Update" : "Add"}
+          </button>
+        </div>
 
-      <button onClick={handleAdd}>
-        {editIndex !== null ? "Update" : "Add"}
-      </button>
+        <ul>
+          {tasks.map((t, index) => (
+            <li key={index}>
+              <span>{t}</span>
 
-      <ul style={{ listStyle: "none" }}>
-        {tasks.map((t, index) => (
-          <li key={index} style={{ margin: "10px" }}>
-            {t}
-
-            <button onClick={() => editTask(index)}>Edit</button>
-            <button onClick={() => deleteTask(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+              <div>
+                <button className="edit" onClick={() => editTask(index)}>
+                  Edit
+                </button>
+                <button className="delete" onClick={() => deleteTask(index)}>
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
